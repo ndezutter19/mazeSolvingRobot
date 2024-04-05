@@ -1,0 +1,283 @@
+brick.SetColorMode(1, 2);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+global key
+InitKeyboard();
+hasVisitedBlue = false;
+hasVisitedGreen = false;
+while 1
+brightness = brick.ColorCode(1);
+d = brick.UltrasonicDist(2);
+display(d);
+pause(0.25);
+if brightness == 5 %stop sign
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.60);
+end
+if d <= 7 %too close to wall, turns left
+brick.MoveMotor('A', -47);
+brick.MoveMotor('B', -45)
+end
+if d >=15 && d <= 50 %too far to wall and not touching wall, turns right
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B',-47);
+end
+if d > 7 && d < 15 %within the range, goes straight
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+end
+if brightness == 2 && hasVisitedBlue == false %blue pick up point give remote control
+hasVisitedBlue = true;
+pause(1.0);
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(.1);
+while 1
+pause(0.1);
+switch key
+case 's'
+brick.MoveMotor('A', 50);
+brick.MoveMotor('B', 50);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'w'
+brick.MoveMotor('A', -50);
+brick.MoveMotor('B', -50);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'd'
+brick.MoveMotor('A', 50);
+brick.MoveMotor('B', -50);
+pause(.25);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'a'
+brick.MoveMotor('A', -50);
+brick.MoveMotor('B', 50);
+pause(.25);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'o'
+brick.MoveMotor('C', 10);
+pause(.5)
+brick.StopMotor('C');
+case 'k'
+brick.MoveMotor('C', -10);
+pause(.5);
+brick.StopMotor('C');
+case 'h'
+brick.MoveMotor('A', 25);
+brick.MoveMotor('B', 25);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'y'
+brick.MoveMotor('A', -25);
+brick.MoveMotor('B', -25);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'j'
+brick.MoveMotor('A', 25);
+brick.MoveMotor('B', -25);
+pause(.15);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'g'
+brick.MoveMotor('A', -25);
+brick.MoveMotor('B', 25);
+pause(.15);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'z'
+break;
+end
+end
+display('Taking over again'); %gets car out of pick up point
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(1.0);
+end %end remote control section
+if brightness == 3 && hasVisitedBlue == true && hasVisitedGreen == false %Green drop off
+point give remote control
+hasVisitedGreen = true;
+pause(1.0);
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(.1);
+while 1
+pause(0.1);
+switch key
+case 's'
+brick.MoveMotor('A', 50);
+brick.MoveMotor('B', 50);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'w'
+brick.MoveMotor('A', -50);
+brick.MoveMotor('B', -50);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'd'
+brick.MoveMotor('A', 50);
+brick.MoveMotor('B', -50);
+pause(.25);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'a'
+brick.MoveMotor('A', -50);
+brick.MoveMotor('B', 50);
+pause(.25);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'o'
+brick.MoveMotor('C', 10);
+pause(.5)
+brick.StopMotor('C');
+case 'k'
+brick.MoveMotor('C', -10);
+pause(.5);
+brick.StopMotor('C');
+case 'h'
+brick.MoveMotor('A', 25);
+brick.MoveMotor('B', 25);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'y'
+brick.MoveMotor('A', -25);
+brick.MoveMotor('B', -25);
+pause(.5);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'j'
+brick.MoveMotor('A', 25);
+brick.MoveMotor('B', -25);
+pause(.15);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'g'
+brick.MoveMotor('A', -25);
+brick.MoveMotor('B', 25);
+pause(.15);
+brick.StopMotor('A');
+brick.StopMotor('B');
+case 'z'
+break;
+end
+end
+display('Taking over again'); %gets car out of pick up point
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(1.0);
+end %end remote control section
+if d >= 50 %turn right
+pause(.30);
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign before turn
+pause(.55);
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A',40);
+brick.MoveMotor('B', -45);
+end
+pause(.30);
+brick.MoveMotor('A',25);
+brick.MoveMotor('B',-25);
+pause(.55);
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign during turn (and finish turn)
+pause(.45);
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A',40);
+brick.MoveMotor('B', -45);
+end
+if brightness ~= 5 %dont stop if no stop sign
+pause(.55);
+end
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign before moving
+disp('Stop Sign');
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.00);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.60);
+end
+%possibly stopmotor here
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.25);
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign again
+disp('Stop Sign');
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.60);
+end
+pause(.25);
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign again
+disp('Stop Sign');
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.60);
+end
+pause(.25);
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign again
+disp('Stop Sign');
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.60);
+end
+pause(.25);
+brightness = brick.ColorCode(1);
+if brightness == 5 %check for stop sign again
+disp('Stop Sign');
+brick.StopMotor('A');
+brick.StopMotor('B');
+pause(1.0);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+pause(.60);
+end
+end
+if brick.TouchPressed(3) == 1 %hits wall in front, turns left
+brick.MoveMotor('A',25);
+brick.MoveMotor('B',25);
+pause(1.40);
+brick.MoveMotor('A',-25);
+brick.MoveMotor('B',25);
+pause(1.25);
+brick.MoveMotor('A', -45);
+brick.MoveMotor('B', -45);
+end
+if brightness == 4 && hasVisitedGreen == true && hasVisitedBlue == true %Yellow end point
+pause(2.0);
+break;
+end
+end
+brick.StopMotor('A');
+brick.StopMotor('B');
